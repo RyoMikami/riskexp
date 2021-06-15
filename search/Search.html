@@ -1,0 +1,107 @@
+{{ block title }}
+    
+{{ endblock }}
+
+{{ block content }}
+
+    <p id="msg-new-value"></p>
+    <p id="msg-my-num"></p>
+    <p id="msg-my-status"></p>
+    
+    
+
+    <p>ラウンドを続行しますか？</p>
+    <button type="button" data-toggle="button" id='conti-btn' value=2 onclick="sendValue()" >ラウンドを続行する</button>
+    <button id='end-btn' >ラウンドを終了する</button>
+    
+    
+    <BR><BR><BR><BR>
+
+    <div class="tab-wrap">
+        <input id="TAB-01" type="checkbox" name="TAB" class="tab-switch"  /><label class="tab-label" for="TAB-01">インストラクションを確認する</label>
+        <div class="tab-content">
+            コンテンツ 1
+        </div>
+    </div>
+
+
+    <style>
+        .tab-label {
+        color: White;
+        background: DeepSkyBlue;
+        font-weight: bold;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+        margin-bottom: -1px;
+        padding: 10px .5em;
+        border: 1px solid rgba(0,0,0,.2);
+        cursor: pointer;
+        display: block;
+        }
+        .tab-label:before {
+        content: '▼';
+        margin-right: .2em;
+        display:inline-block;
+        transform:rotate(-90deg);
+        }
+        .tab-switch:checked+.tab-label:before {
+        transform:rotate(0);
+        }
+        .tab-content {
+        height: 0;
+        padding: 0 15px;
+        overflow: hidden;
+        opacity: 0;
+        }
+        /* アクティブなタブ */
+        .tab-switch:checked+.tab-label {
+        background: LightGray;
+        }
+        .tab-switch:checked+.tab-label+.tab-content {
+        height: auto;
+        overflow: auto;
+        margin-bottom: -1px;
+        padding: 15px;
+        opacity: 1;
+        transition: .5s;
+        border: 1px solid LightGray;
+        }
+        /* ラジオボタン非表示 */
+        .tab-switch {
+        display: none;
+        }
+
+    </style>
+    
+    <script>
+        let contiBtn = document.getElementById('conti-btn');
+        let endBtn = document.getElementById('end-btn');
+        let msgMyStatus = document.getElementById('msg-my-status');
+        let msgMynum = document.getElementById('msg-my-num');
+        let msgNewBalue = document.getElementById('msg-new-value');
+
+        
+        function sendValue(){
+            document.activeElement.blur()
+            msgMyStatus.innerText = `しばらくお待ちください`;
+            endBtn.disabled = 'disabled';
+            contiBtn.disabled = 'disabled';
+            liveSend({conti:true});
+        }
+
+        function liveRecv(data){
+            console.log('received a message!', data)
+            
+            document.activeElement.blur()
+            msgNewBalue.innerText = `新たに ${data.current_value}  を見つけました。`;
+            msgMynum.innerText = `現在の継続回数: ${data.search_num}`;
+            msgMyStatus.innerText = `このラウンドでの最大ポイントは ${data.current_best_value} です`;
+            contiBtn.disabled = '';
+            endBtn.disabled = '';
+        }
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        liveSend({conti:false});
+    });
+    </script>
+
+    {{ endblock }}

@@ -1,0 +1,16 @@
+{{ block title }}
+    Page title
+{{ endblock }}
+
+{{ block content }}
+
+
+<p>このラウンドであなたが見つけた最大ポイントは {{ player.current_best_value}}</p> 
+
+<p>探索回数は {{ player.search_num }}</p> 
+
+<p>よって、このラウンドでの最終的なポイントは {{ player.result }}になります</p> 
+
+{{ next_button }}
+
+{{ endblock }}
